@@ -1,0 +1,44 @@
+{% extends 'tasks/base.html' %}
+{% block title %} Tasks List {% endblock %}
+
+{% block content %}
+  <h1>Tasks List</h1>
+  {% if task_list %}
+  <form method="get">
+    <input type="text" name="search" placeholder="Search by title">
+    <input type="date" name="due_date">
+    <input type="date" name="created_at">
+    <select name="priority">
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+    </select>
+    <select name="is_complete">
+        <option value="" selected>Completion Status</option>
+        <option value="True">Complete</option>
+        <option value="False">Incomplete</option>
+    </select>
+    <button type="submit">Apply Filters</button>
+</form>
+
+    <ul>
+      {% if user.is_authenticated %}
+      <a href="{% url 'task-create' %}">Create Task</a>
+      {% for task in task_list %}
+      <p><a href="{{ task.get_absolute_url }}">Task Title:{{ task.title }}</a></p> 
+      <a href="{% url 'task-detail' task.pk %}">Task Detail</a>
+      {% endfor %}
+      {% else %}
+      {% for task in task_list %}
+      <li>
+        <p><a href="{{ task.get_absolute_url }}">Task Title:{{ task.title }}</a></p>
+        <a href="{% url 'task-detail' task.pk %}">Task Detail</a>
+      </li>
+      {% endfor %}
+     {% endif %}
+    </ul>
+  {% else %}
+    <p>There are no tasks.</p>
+    <a href="{% url 'task-create' %}">Create Task</a>
+  {% endif %}
+{% endblock %}

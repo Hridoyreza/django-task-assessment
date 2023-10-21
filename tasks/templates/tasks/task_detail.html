@@ -1,0 +1,27 @@
+{% extends 'tasks/base.html' %}
+{% block title %} Tasks detail {% endblock %}
+
+{% block content %}
+{% load static %}
+
+  <h1>Tasks Detail</h1>
+    <ul>
+      <li>
+        
+        {% if user.is_authenticated %}
+        <a href="{% url 'task-update' task.pk %}">Update</a>
+        <a href="{% url 'task-delete' task.pk %}">Delete</a>
+        <a href="{% url 'task-create' %}">Create New Task</a>
+        <p>Title: {{ task.title }}</p>
+        <p><img src="{% if task.img %}{{ task.img.url }}{% else %}{% static 'stock.jpg' %}{% endif %}" alt="{{ task.title }} Image"></p>
+        <p>Description: {{ task.description }}</p>
+        <p>Created on: {{ task.created_at }}</p>
+        <p>Due Date: {{ task.due_date }}</p>
+        <p>Priority: {{ task.priority }}</p>
+        <p>Complete: {% if task.is_complete %}Yes{% else %}No{% endif %}</p>
+        {% else %}
+        <h1>You must login to create, delete or update a task</h1> <a href="{% url 'login' %}">login here</a>
+        {% endif %}
+      </li>
+    </ul>
+{% endblock %}
